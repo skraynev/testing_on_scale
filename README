@@ -1,0 +1,31 @@
+Execution same sceanrios for different config(s) option(s)
+----------------------------------------------------------
+
+Currently script uses sceanrios mentioned for value:
+"RALLY_SCENARIOS". It's hardcoded for now.
+So if you need to change it, please update it manually.
+
+The script gets 3 optional params:
+ - min (default == 4)
+ - max (default == 8)
+ - step (default == 1)
+
+These options used for changing parameter of 'num_engine_workers'
+in heat config file.
+
+The main logic is follow:
+ - Copy this script in folder with necessary sceanrios or use
+   correct pathes on the scenarios
+ - Execute command `bash test_script.sh` with optional paramaters
+   (if it's necessary), otrwise will be used default values
+ - Script will set Convergence is True (currently it's commented in function
+   `set_up_convergence` and  will be used default Heat engine)
+ - Then all heat-engine and heat-api processes will be restarted with command
+   `service *** restart`
+ - New value of the `num_engine_workers` will be set and heat-engine
+   will be restarted again to apply new config.
+ - Mentioned Rally will be executed and all results will be stored to files:
+   with name: <scenario-name>-<current value of the 'num_engine_workers'>.
+   Note: all these files will be stored in directory ``results/new_default/``.
+   It's also hardcoded for now.
+ - Then whole cycle will repeat with new value of `num_engine_workers`
